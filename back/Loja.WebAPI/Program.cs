@@ -1,4 +1,4 @@
-using Loja.API.Data;
+using Loja.Persistence.Data.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddCors();
 builder.Services.AddSqlServer<ApplicationDbContext>(builder.Configuration["ConnectionStrings:Default"]);
 
 var app = builder.Build();
@@ -18,17 +17,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseCors(c =>
-{
-    c.WithOrigins("http://localhost:4200");
-    c.AllowAnyHeader();
-    c.AllowAnyMethod();
-
-    //c.AllowAnyHeader();
-    //c.AllowAnyMethod();
-    //c.AllowAnyOrigin();
-});
 
 app.UseHttpsRedirection();
 
