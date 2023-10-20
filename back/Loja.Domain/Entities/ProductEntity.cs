@@ -1,6 +1,6 @@
 ﻿namespace Loja.Domain.Entities;
 
-public class Product
+public sealed class ProductEntity
 {
     public int Id { get; private set; }
     public string Name { get; private set; }
@@ -11,9 +11,9 @@ public class Product
     public string? UrlImages { get; private set; }
 
     public int InventoryId { get; private set; }
-    public Inventory Inventory { get; private set; } = new Inventory("none", "none");
+    public InventoryEntity Inventory { get; private set; } = new InventoryEntity("none", "none");
 
-    public Product(
+    public ProductEntity(
         string name,
         string? description,
         string? dimension,

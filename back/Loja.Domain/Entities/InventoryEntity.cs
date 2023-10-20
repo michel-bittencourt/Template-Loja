@@ -1,14 +1,14 @@
 ﻿namespace Loja.Domain.Entities;
 
-public class Inventory
+public sealed class InventoryEntity
 {
     public int Id { get; private set; }
     public string Name { get; private set; }
     public string? Description { get; private set; }
 
-    public IEnumerable<Product> products { get; private set; } = new List<Product>();
+    public IEnumerable<ProductEntity> products { get; private set; } = new List<ProductEntity>();
 
-    public Inventory(string name, string? description)
+    public InventoryEntity(string name, string? description)
     {
         Name = name;
         Description = description;

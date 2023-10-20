@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Loja.Persistence.Migrations
+namespace Loja.Infrastructure.Migrations
 {
     public partial class init : Migration
     {

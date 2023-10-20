@@ -1,6 +1,6 @@
-﻿namespace Loja.Persistence.Repositories.General;
+﻿namespace Loja.Infrastructure.Repositories.General;
 
-public interface IGeneral
+public interface IGeneralRepository
 {
     void Add<T>(T entity) where T : class;
     void Update<T>(T entity) where T : class;

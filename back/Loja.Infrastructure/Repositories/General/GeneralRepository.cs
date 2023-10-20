@@ -1,12 +1,13 @@
-﻿using Loja.Persistence.Data.Context;
+﻿using Loja.Infrastructure.Data.Contexts;
+using Loja.Infrastructure.Repositories.General;
 
-namespace Loja.Persistence.Repositories.General;
+namespace Loja.Infrastructure.Interfaces.General;
 
-public class General : IGeneral
+public class GeneralRepository : IGeneralRepository
 {
     private readonly ApplicationDbContext _context;
 
-    public General(ApplicationDbContext Context)
+    public GeneralRepository(ApplicationDbContext Context)
     {
         _context = Context;
     }
@@ -32,6 +33,6 @@ public class General : IGeneral
 
     public async Task<bool> SaveChangesAsync()
     {
-        return (await _context.SaveChangesAsync()) > 0;
+        return await _context.SaveChangesAsync() > 0;
     }
 }

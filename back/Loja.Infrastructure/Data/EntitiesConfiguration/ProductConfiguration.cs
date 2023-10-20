@@ -2,11 +2,11 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 
-namespace Loja.Persistence.Data.EntitiesConfiguration;
+namespace Loja.Infrastructure.Data.EntitiesConfiguration;
 
-public class ProductConfiguration : IEntityTypeConfiguration<Product>
+public class ProductConfiguration : IEntityTypeConfiguration<ProductEntity>
 {
-    public void Configure(EntityTypeBuilder<Product> builder)
+    public void Configure(EntityTypeBuilder<ProductEntity> builder)
     {
         builder.Property(p => p.Name).IsRequired();
         builder.Property(p => p.Description);
