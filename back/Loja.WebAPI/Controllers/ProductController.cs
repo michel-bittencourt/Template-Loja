@@ -1,10 +1,11 @@
-﻿using Loja.Application.Services.Products;
+﻿using Loja.Application.DTO;
+using Loja.Application.Services.Products;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Loja.WebAPI.Controllers;
 
+
 [ApiController]
-[Route("api/[controller]")]
 public class ProductController : ControllerBase
 {
     private readonly IProductService _productService;
@@ -13,17 +14,75 @@ public class ProductController : ControllerBase
         _productService = productService;
     }
 
-    [HttpGet]
-    public async Task<IActionResult> Get()
+    [HttpPost, Route("api/product")]
+    public async Task<IActionResult> PostProduct(ProductDTO productDto)
     {
         try
         {
-            var products = await _productService.GetAllProductsAsync();
+            if (productDto == null)
+            {
+                return BadRequest("Error while trying to register a product");
+            }
 
-            if (products == null)
+            await _productService.Add(productDto);
+
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return this.StatusCode(StatusCodes.Status500InternalServerError, $"Something went wrong, please contact the developers. Error: {ex.Message}");
+        }
+    }
+
+    [HttpPut("api/product")]
+    public async Task<IActionResult> PutProduct(ProductDTO productDto)
+    {
+        try
+        {
+            if (productDto == null)
+                return NotFound();
+
+            await _productService.Update(productDto);
+
+            return Ok(productDto);
+        }
+        catch (Exception ex)
+        {
+            return this.StatusCode(StatusCodes.Status500InternalServerError, $"Something went wrong, please contact the developers. Error: {ex.Message}");
+        }
+    }
+
+    [HttpDelete("api/product/{id}")]
+    public async Task<IActionResult> DeleteProduct(int id)
+    {
+        try
+        {
+            var product = await _productService.GetProductById(id);
+
+            if (product == null)
             {
                 return NotFound();
             }
+
+            await _productService.Remove(id);
+
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return this.StatusCode(StatusCodes.Status500InternalServerError, $"Something went wrong, please contact the developers. Error: {ex.Message}");
+        }
+    }
+
+    #region GETS
+    [HttpGet, Route("api/product")]
+    public async Task<IActionResult> GetProducts()
+    {
+        try
+        {
+            var products = await _productService.GetProductsAsync();
+
+            if (products == null) return NotFound();
 
             return Ok(products);
         }
@@ -33,17 +92,14 @@ public class ProductController : ControllerBase
         }
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
+    [HttpGet, Route("api/product/{id}")]
+    public async Task<IActionResult> GetProductById(int id)
     {
         try
         {
-            var product = await _productService.GetProductByIdAsync(id);
+            var product = await _productService.GetProductById(id);
 
-            if (product == null)
-            {
-                return NotFound();
-            }
+            if (product == null) return NotFound();
 
             return Ok(product);
         }
@@ -53,5 +109,21 @@ public class ProductController : ControllerBase
         }
     }
 
+    [HttpGet, Route("api/inventory/{id}")]
+    public async Task<IActionResult> GetProductByInventory(int id)
+    {
+        try
+        {
+            var products = await _productService.GetProductsInventoryAsync(id);
 
+            if (products == null) return NotFound();
+
+            return Ok(products);
+        }
+        catch (Exception ex)
+        {
+            return this.StatusCode(StatusCodes.Status500InternalServerError, $"Something went wrong, please contact the developers. Error: {ex.Message}");
+        }
+    }
+    #endregion
 }

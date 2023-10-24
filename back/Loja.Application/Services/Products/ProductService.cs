@@ -1,123 +1,59 @@
-﻿using Loja.Domain.Entities;
-using Loja.Infrastructure.Repositories.General;
-using Loja.Infrastructure.Repositories.Products;
+﻿using AutoMapper;
+using Loja.Application.DTO;
+using Loja.Domain.Entities;
+using Loja.Domain.Repositories;
 
 namespace Loja.Application.Services.Products;
 
 public class ProductService : IProductService
 {
     private readonly IProductRepository _productRepository;
-    private readonly IGeneralRepository _generalRepository;
+    private readonly IMapper _mapper;
 
-    public ProductService(IProductRepository productRepository, IGeneralRepository generalRepository)
+    public ProductService(IProductRepository productRepository, IMapper mapper)
     {
         _productRepository = productRepository;
-        _generalRepository = generalRepository;
+        _mapper = mapper;
     }
 
-    public async Task<ProductEntity> AddProductAsync(ProductEntity product)
+    public async Task Add(ProductDTO productDto)
     {
-        try
-        {
-            _generalRepository.Add(product);
-
-            if (await _generalRepository.SaveChangesAsync())
-            {
-                return await _productRepository.GetProductByIdAsync(product.Id);
-            }
-
-            return null;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception(ex.Message);
-        }
+        var productEntity = _mapper.Map<ProductEntity>(productDto);
+        await _productRepository.CreateProductAsync(productEntity);
     }
 
-    public async Task<ProductEntity> UpdateProductAsync(int productId, ProductEntity product)
+    public async Task Update(ProductDTO productDto)
     {
-        try
-        {
-            var Product = _productRepository.GetProductByIdAsync(productId);
+        var productEntity = _mapper.Map<ProductEntity>(productDto);
 
-            if (Product != null)
-            {
-                _generalRepository.Update(Product);
-                if (await _generalRepository.SaveChangesAsync())
-                {
-                    return await _productRepository.GetProductByIdAsync(product.Id);
-                }
-            }
-            return null;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception(ex.Message);
-        }
+        await _productRepository.UpdateProductAsync(productEntity);
     }
 
-    public async Task<bool> DeleteProductAsync(int productId)
+    public async Task Remove(int? id)
     {
-        try
-        {
-            var Product = _productRepository.GetProductByIdAsync(productId);
+        var product = await _productRepository.GetProductByIdAsync(id);
 
-            if (Product != null)
-            {
-                _generalRepository.Delete(Product);
-                return await _generalRepository.SaveChangesAsync();
-            }
-            throw new Exception("Algo errado");
-        }
-        catch (Exception ex)
-        {
-            throw new Exception(ex.Message);
-        }
+        await _productRepository.RemoveProductAsync(product);
     }
 
-    public async Task<ProductEntity> GetProductByIdAsync(int productId)
+    public async Task<ProductDTO> GetProductById(int? id)
     {
-        try
-        {
-            return await _productRepository.GetProductByIdAsync(productId);
-        }
-        catch (Exception ex)
-        {
-            throw new Exception(ex.Message);
-        }
+        var product = await _productRepository.GetProductByIdAsync(id);
+
+        return _mapper.Map<ProductDTO>(product);
     }
 
-    public async Task<IEnumerable<ProductEntity>> GetAllProductsAsync()
+    public async Task<IEnumerable<ProductDTO>> GetProductsAsync()
     {
-        try
-        {
-            var product = await _productRepository.GetAllProductsAsync();
-            if (product != null)
-            {
-                return product;
-            }
-            return null;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception(ex.Message);
-        }
+        var products = await _productRepository.GetProductsAsync();
+
+        return _mapper.Map<IEnumerable<ProductDTO>>(products);
     }
 
-    public async Task<IEnumerable<ProductEntity>> GetAllProductsByInventoryAsync(int inventoryId)
+    public async Task<IEnumerable<ProductDTO>> GetProductsInventoryAsync(int? id)
     {
-        try
-        {
-            var productByInventory = await _productRepository.GetAllProductsByInventoryAsync(inventoryId);
-            if (productByInventory != null)
-            {
-                return productByInventory;
-            }
-            return null;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception(ex.Message);
-        }
+        var products = await _productRepository.GetProductsInventoryAsync(id);
+
+        return _mapper.Map<IEnumerable<ProductDTO>>(products);
     }
 }

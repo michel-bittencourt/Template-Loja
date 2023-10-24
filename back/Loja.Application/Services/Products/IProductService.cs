@@ -1,14 +1,14 @@
-﻿using Loja.Domain.Entities;
+﻿using Loja.Application.DTO;
 
 namespace Loja.Application.Services.Products;
 
 public interface IProductService
 {
-    Task<ProductEntity> AddProductAsync(ProductEntity product);
-    Task<ProductEntity> UpdateProductAsync(int productId, ProductEntity product);
-    Task<bool> DeleteProductAsync(int productId);
+    Task Add(ProductDTO productDto);
+    Task Update(ProductDTO productDto);
+    Task Remove(int? id);
 
-    Task<IEnumerable<ProductEntity>> GetAllProductsAsync();
-    Task<IEnumerable<ProductEntity>> GetAllProductsByInventoryAsync(int inventoryId);
-    Task<ProductEntity> GetProductByIdAsync(int productId);
+    Task<IEnumerable<ProductDTO>> GetProductsAsync();
+    Task<ProductDTO> GetProductById(int? id);
+    Task<IEnumerable<ProductDTO>> GetProductsInventoryAsync(int? id);
 }

@@ -1,5 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { ProductService } from '../services/product.service';
+import { Product } from '../models/product';
 
 @Component({
   selector: 'app-product',
@@ -7,9 +8,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./product.component.scss'],
 })
 export class ProductComponent implements OnInit {
+  public products: Product[] = [];
+  public filteredProducts: any = [];
+
   mostrarImagem: boolean = true;
   private _listFilter: string = '';
-  public filteredProducts: any = [];
 
   public get listFilter(): string {
     return this._listFilter;
@@ -22,7 +25,7 @@ export class ProductComponent implements OnInit {
       : this.products;
   }
 
-  ProductsFilter(filterBy: string): any {
+  public ProductsFilter(filterBy: string): Product[] {
     filterBy = filterBy.toLocaleLowerCase();
     return this.products.filter(
       (products: any) =>
@@ -33,9 +36,7 @@ export class ProductComponent implements OnInit {
 
   isCollapsed = false;
 
-  public products: any = [];
-
-  constructor(private http: HttpClient) {}
+  constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
     this.GetProducts();
@@ -46,9 +47,9 @@ export class ProductComponent implements OnInit {
   }
 
   public GetProducts(): void {
-    this.http.get('https://localhost:7168/Product').subscribe(
-      (Response) => {
-        this.products = Response;
+    this.productService.getProducts().subscribe(
+      (_products: Product[]) => {
+        this.products = _products;
         this.filteredProducts = this.products;
       },
       (error) => console.log(error)

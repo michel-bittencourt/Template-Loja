@@ -4,13 +4,16 @@ public sealed class InventoryEntity
 {
     public int Id { get; private set; }
     public string Name { get; private set; }
-    public string? Description { get; private set; }
+    public DateTime EntryDate { get; private set; }
+    public DateTime? ExitDate { get; private set; }
+    public string? ExitReason { get; private set; } //Enum
+    public string? StorageLocation { get; private set; }
+    public string? AdditionalNotes { get; set; }
+    public bool Active { get; private set; } = true;
 
-    public IEnumerable<ProductEntity> products { get; private set; } = new List<ProductEntity>();
 
-    public InventoryEntity(string name, string? description)
-    {
-        Name = name;
-        Description = description;
-    }
+
+    public int UserId { get; private set; }
+
+    public ICollection<ProductEntity> Products { get; private set; }
 }

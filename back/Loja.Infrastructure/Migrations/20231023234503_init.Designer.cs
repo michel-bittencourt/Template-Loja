@@ -4,6 +4,7 @@ using Loja.Infrastructure.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Loja.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231023234503_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,7 +50,7 @@ namespace Loja.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("CategoryEntity");
                 });
 
             modelBuilder.Entity("Loja.Domain.Entities.InventoryEntity", b =>
@@ -270,7 +272,7 @@ namespace Loja.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Suppliers");
+                    b.ToTable("SupplierEntity");
                 });
 
             modelBuilder.Entity("Loja.Domain.Entities.SupplyEntity", b =>
@@ -291,7 +293,7 @@ namespace Loja.Infrastructure.Migrations
 
                     b.HasIndex("SupplierId");
 
-                    b.ToTable("Supplies");
+                    b.ToTable("SupplyEntity");
                 });
 
             modelBuilder.Entity("Loja.Domain.Entities.UnitMeasureEntity", b =>
@@ -316,7 +318,7 @@ namespace Loja.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UnitsMeasures");
+                    b.ToTable("UnitMeasureEntity");
                 });
 
             modelBuilder.Entity("Loja.Domain.Entities.ProductEntity", b =>

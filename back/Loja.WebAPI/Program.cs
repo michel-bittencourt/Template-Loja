@@ -1,21 +1,26 @@
-using Loja.Application.Services.Inventories;
+using Loja.Application.Mappings;
 using Loja.Application.Services.Products;
+using Loja.Application.Services.UnitMeasure;
+using Loja.Domain.Interfaces;
+using Loja.Domain.Repositories;
 using Loja.Infrastructure.Data.Contexts;
-using Loja.Infrastructure.Interfaces.General;
-using Loja.Infrastructure.Repositories.General;
-using Loja.Infrastructure.Repositories.Inventories;
-using Loja.Infrastructure.Repositories.Products;
+using Loja.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(x =>
+    {
+        x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+    });
+
 builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IInventoryService, InventoryService>();
-builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
-builder.Services.AddScoped<IGeneralRepository, GeneralRepository>();
+builder.Services.AddScoped<IUnitMeasureService, UnitMeasureService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IUnitMeasureRepository, UnitMeasureRepository>();
+builder.Services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();

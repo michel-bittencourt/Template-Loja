@@ -21,15 +21,15 @@
           <button
             type="button"
             class="btn btn-light btn-sm"
-            (click)="ChangeImage()"
-          >
+            (click)="ChangeImage()">
+            <i class="{{ mostrarImagem ? 'fa fa-eye' : 'fa fa-eye-slash' }}"></i>
             {{ mostrarImagem ? "Show image" : "Hide image" }}
           </button>
         </th>
         <th class="col-2">Name</th>
         <th class="col-3">Description</th>
-        <th class="col-1">Quantity</th>
-        <th class="col-1">Date</th>
+        <th class="col-1">Dimension</th>
+        <th class="col-1">Material</th>
         <th class="col-2">Ação</th>
       </tr>
     </thead>
@@ -48,10 +48,10 @@
         </td>
         <td>{{ product.name }}</td>
         <td>{{ product.description }}</td>
-        <td>{{ product.quantity }}</td>
-        <td>{{ product.date | date : "dd/MM/yyyy" }}</td>
+        <td>{{ product.dimension }}</td>
+        <td>{{ product.material }}</td>
         <td>
-            <button type="button" class="btn btn-success btn-sm mx-4"><i class="fa-solid fa-pen"></i></button>
+            <button type="button" class="btn btn-warning btn-sm mx-4"><i class="fa-solid fa-pen"></i></button>
             <button type="button" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
         </td>
       </tr>
