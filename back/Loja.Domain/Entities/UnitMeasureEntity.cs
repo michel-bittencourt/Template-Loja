@@ -7,5 +7,5 @@ public class UnitMeasureEntity
     public string? Description { get; set; }
     public bool Active { get; private set; } = true;
 
-    public ICollection<ProductEntity?> Products { get; private set; }
+    public ICollection<ProductEntity> Products { get; private set; }
 }

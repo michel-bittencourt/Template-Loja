@@ -34,19 +34,21 @@ public class ProductRepository : IProductRepository
         return product;
     }
 
-
-    public async Task<ProductEntity> GetProductByIdAsync(int? id)
+    public async Task<IEnumerable<ProductEntity>> GetProductsAsync()
     {
-        var query = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+        var query = await _context.Products
+            .Where(p => p.Active == true)
+            .OrderBy(p => p.Name)
+            .ToListAsync();
 
         return query;
     }
 
-    public async Task<IEnumerable<ProductEntity>> GetProductsAsync()
+    public async Task<ProductEntity> GetProductByIdAsync(int? id)
     {
         var query = await _context.Products
-            .OrderBy(p => p.Name)
-            .ToListAsync();
+            .Where(s => s.Active == true)
+            .FirstOrDefaultAsync(p => p.Id == id);
 
         return query;
     }
@@ -54,7 +56,7 @@ public class ProductRepository : IProductRepository
     public async Task<IEnumerable<ProductEntity>> GetProductsInventoryAsync(int? id)
     {
         var query = await _context.Products
-            .Where(p => p.InventoryId == id)
+            .Where(p => p.InventoryId == id && p.Active == true)
             .OrderBy(p => p.Name)
             .ToListAsync();
 

@@ -37,6 +37,7 @@ public class UnitMeasureRepository : IUnitMeasureRepository
     public async Task<IEnumerable<UnitMeasureEntity>> GetAllUnitMeasure()
     {
         var query = await _context.UnitsMeasures
+            .Where(u => u.Active == true)
             .OrderBy(u => u.Name)
             .ToListAsync();
 
@@ -45,7 +46,9 @@ public class UnitMeasureRepository : IUnitMeasureRepository
 
     public async Task<UnitMeasureEntity> GetUnitMeasureById(int? id)
     {
-        var query = await _context.UnitsMeasures.FirstOrDefaultAsync(u => u.Id == id);
+        var query = await _context.UnitsMeasures
+            .Where(u => u.Active == true)
+            .FirstOrDefaultAsync(u => u.Id == id);
 
         return query;
     }

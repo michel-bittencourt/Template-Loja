@@ -14,19 +14,18 @@ public class ProductController : ControllerBase
         _productService = productService;
     }
 
+    #region Métodos
     [HttpPost, Route("api/product")]
     public async Task<IActionResult> PostProduct(ProductDTO productDto)
     {
         try
         {
             if (productDto == null)
-            {
-                return BadRequest("Error while trying to register a product");
-            }
+                return BadRequest();
 
             await _productService.Add(productDto);
 
-            return Ok();
+            return Created($"api/product/" + productDto.Id, productDto);
         }
         catch (Exception ex)
         {
@@ -60,9 +59,7 @@ public class ProductController : ControllerBase
             var product = await _productService.GetProductById(id);
 
             if (product == null)
-            {
                 return NotFound();
-            }
 
             await _productService.Remove(id);
 
@@ -74,7 +71,6 @@ public class ProductController : ControllerBase
         }
     }
 
-    #region GETS
     [HttpGet, Route("api/product")]
     public async Task<IActionResult> GetProducts()
     {
@@ -82,7 +78,8 @@ public class ProductController : ControllerBase
         {
             var products = await _productService.GetProductsAsync();
 
-            if (products == null) return NotFound();
+            if (products == null)
+                return NotFound();
 
             return Ok(products);
         }
@@ -99,7 +96,8 @@ public class ProductController : ControllerBase
         {
             var product = await _productService.GetProductById(id);
 
-            if (product == null) return NotFound();
+            if (product == null)
+                return NotFound();
 
             return Ok(product);
         }
@@ -116,7 +114,8 @@ public class ProductController : ControllerBase
         {
             var products = await _productService.GetProductsInventoryAsync(id);
 
-            if (products == null) return NotFound();
+            if (products == null)
+                return NotFound();
 
             return Ok(products);
         }

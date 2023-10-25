@@ -18,15 +18,15 @@ public class ProductService : IProductService
 
     public async Task Add(ProductDTO productDto)
     {
-        var productEntity = _mapper.Map<ProductEntity>(productDto);
-        await _productRepository.CreateProductAsync(productEntity);
+        var product = _mapper.Map<ProductEntity>(productDto);
+        await _productRepository.CreateProductAsync(product);
     }
 
     public async Task Update(ProductDTO productDto)
     {
-        var productEntity = _mapper.Map<ProductEntity>(productDto);
+        var product = _mapper.Map<ProductEntity>(productDto);
 
-        await _productRepository.UpdateProductAsync(productEntity);
+        await _productRepository.UpdateProductAsync(product);
     }
 
     public async Task Remove(int? id)
