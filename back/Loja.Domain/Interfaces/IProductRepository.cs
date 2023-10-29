@@ -4,11 +4,13 @@ namespace Loja.Domain.Repositories;
 
 public interface IProductRepository
 {
-    Task<ProductEntity> CreateProductAsync(ProductEntity product);
-    Task<ProductEntity> UpdateProductAsync(ProductEntity product);
-    Task<ProductEntity> RemoveProductAsync(ProductEntity product);
+    void Add<T>(T entity) where T : class;
+    void Update<T>(T entity) where T : class;
+    void Delete<T>(T entity) where T : class;
+    void DeleteRange<T>(IEnumerable<T> entity) where T : class;
 
-    Task<IEnumerable<ProductEntity>> GetProductsAsync();
-    Task<ProductEntity> GetProductByIdAsync(int? id);
-    Task<IEnumerable<ProductEntity>> GetProductsInventoryAsync(int? id);
+    Task<bool> SaveChangesAsync();
+    Task<IEnumerable<ProductEntity>> GetAllProductsAsync();
+    Task<IEnumerable<ProductEntity>> GetAllProductsByInventoryAsync(string inventory);
+    Task<ProductEntity> GetProductByIdAsync(int productId);
 }

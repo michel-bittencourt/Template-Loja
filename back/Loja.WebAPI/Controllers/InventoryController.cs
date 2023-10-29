@@ -1,30 +1,29 @@
 ﻿using Loja.Application.DTO;
-using Loja.Application.Services.Products;
+using Loja.Application.Services.Inventory;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Loja.WebAPI.Controllers;
 
-
 [ApiController]
-public class ProductController : ControllerBase
+public class InventoryController : ControllerBase
 {
-    private readonly IProductService _productService;
-    public ProductController(IProductService productService)
+    private readonly IInventoryService _inventoryService;
+    public InventoryController(IInventoryService inventoryService)
     {
-        _productService = productService;
+        _inventoryService = inventoryService;
     }
-    #region Métodos
-    [HttpPost, Route("api/product")]
-    public async Task<IActionResult> Post(ProductDTO productDto)
+
+    [HttpPost, Route("api/inventory")]
+    public async Task<IActionResult> Post(InventoryDTO inventoryDto)
     {
         try
         {
-            await _productService.AddProduct(productDto);
+            await _inventoryService.AddInventory(inventoryDto);
 
-            if (productDto == null)
+            if (inventoryDto == null)
                 return BadRequest();
 
-            return Created($"api/product/" + productDto.Id, productDto);
+            return Created("api/inventory" + inventoryDto.Id, inventoryDto);
         }
         catch (Exception ex)
         {
@@ -32,17 +31,17 @@ public class ProductController : ControllerBase
         }
     }
 
-    [HttpPut("api/product")]
-    public async Task<IActionResult> Put(int productId, ProductDTO productDto)
+    [HttpPut, Route("api/inventory/{inventoryId}")]
+    public async Task<IActionResult> Put(int inventoryId, InventoryDTO inventoryDto)
     {
         try
         {
-            if (productDto == null)
+            await _inventoryService.UpdateInventory(inventoryId, inventoryDto);
+
+            if (inventoryDto == null)
                 return NotFound();
 
-            await _productService.UpdateProduct(productId, productDto);
-
-            return Ok(productDto);
+            return Ok(inventoryDto);
         }
         catch (Exception ex)
         {
@@ -50,17 +49,17 @@ public class ProductController : ControllerBase
         }
     }
 
-    [HttpDelete("api/product/{id}")]
+    [HttpDelete, Route("api/inventory/{id}")]
     public async Task<IActionResult> Delete(int id)
     {
         try
         {
-            var product = await _productService.GetProductByIdAsync(id);
+            var inventory = await _inventoryService.GetInventoryByIdAsync(id);
 
-            if (product == null)
+            if (inventory == null)
                 return NotFound();
 
-            await _productService.DeleteProduct(id);
+            await _inventoryService.DeleteInventory(inventory.Id);
 
             return Ok();
         }
@@ -70,17 +69,17 @@ public class ProductController : ControllerBase
         }
     }
 
-    [HttpGet, Route("api/product")]
+    [HttpGet, Route("api/inventory")]
     public async Task<IActionResult> Get()
     {
         try
         {
-            var products = await _productService.GetAllProductsAsync();
+            var inventories = await _inventoryService.GetAllInventoriesAsync();
 
-            if (products == null)
+            if (inventories == null)
                 return NotFound();
 
-            return Ok(products);
+            return Ok(inventories);
         }
         catch (Exception ex)
         {
@@ -88,22 +87,21 @@ public class ProductController : ControllerBase
         }
     }
 
-    [HttpGet, Route("api/product/{id}")]
+    [HttpGet, Route("api/inventory/{id}")]
     public async Task<IActionResult> GetById(int id)
     {
         try
         {
-            var product = await _productService.GetProductByIdAsync(id);
+            var inventory = await _inventoryService.GetInventoryByIdAsync(id);
 
-            if (product == null)
+            if (inventory == null)
                 return NotFound();
 
-            return Ok(product);
+            return Ok(inventory);
         }
         catch (Exception ex)
         {
             return this.StatusCode(StatusCodes.Status500InternalServerError, $"Something went wrong, please contact the developers. Error: {ex.Message}");
         }
     }
-    #endregion
 }

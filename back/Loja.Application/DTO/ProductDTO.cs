@@ -18,8 +18,6 @@ public class ProductDTO
     public bool Available { get; set; }
     public bool Active { get; set; } = true;
 
-    public int UnitMeasureId { get; set; }
-    public int CategoryId { get; set; }
+
     public int InventoryId { get; set; }
-    public int SupplyId { get; set; }
 }

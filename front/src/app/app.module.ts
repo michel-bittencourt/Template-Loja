@@ -7,14 +7,21 @@ import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ProductComponent } from './product/product.component';
-import { NavComponent } from './nav/nav.component';
+import { ProductComponent } from './components/product/product.component';
+import { NavComponent } from './components/nav/nav.component';
 
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { ProductService } from './services/product.service';
+import { InventoryComponent } from './components/inventory/inventory.component';
+import { InventoryService } from './services/inventory.service';
 
 @NgModule({
-  declarations: [AppComponent, NavComponent, ProductComponent],
+  declarations: [
+    AppComponent,
+    NavComponent,
+    ProductComponent,
+    InventoryComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -23,7 +30,7 @@ import { ProductService } from './services/product.service';
     CollapseModule.forRoot(),
     FormsModule,
   ],
-  providers: [ProductService],
+  providers: [ProductService, InventoryService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -5,17 +5,14 @@ import { Product } from '../models/product';
 
 @Injectable()
 export class ProductService {
-  baseURL = 'https://localhost:7285/api';
+  baseURL = 'https://localhost:7285/api/product';
   constructor(private http: HttpClient) {}
 
-  public getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.baseURL}/product`);
+  public GetProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.baseURL}`);
   }
 
-  public getProductsById(id: number): Observable<Product> {
-    return this.http.get<Product>(`${this.baseURL}/${id}`);
-  }
-  public getProductsByInventory(id: number): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.baseURL}/inventory/${id}`);
+  public GetProductsById(productId: number): Observable<Product> {
+    return this.http.get<Product>(`${this.baseURL}/${productId}`);
   }
 }

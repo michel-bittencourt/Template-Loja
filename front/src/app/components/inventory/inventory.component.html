@@ -1,0 +1,47 @@
+<h2>Inventories</h2>
+
+<div class="row g-3 align-items-center">
+  <table class="table table-striped table-bordered text-center mx-auto">
+    <thead class="table-dark">
+      <tr>
+        <th class="col-1">#</th>
+        <th class="col-2">Name</th>
+        <th class="col-2">Entry Date</th>
+        <th class="col-1">Exit Date</th>
+        <th class="col-1">Storage Location</th>
+        <th class="col-1">Additional Notes</th>
+        <th class="col-1">Products</th>
+        <th class="col-2">Action</th>
+      </tr>
+    </thead>
+    <tbody
+      *ngIf="inventories && inventories.length"
+      class="table-group-divider"
+    >
+      <tr *ngFor="let inventory of inventories">
+        <td>{{ inventory.id }}</td>
+        <td>{{ inventory.name }}</td>
+        <td>{{ inventory.entryDate | date : "dd/MM/yyyy" }}</td>
+        <td>{{ inventory.exitDate | date : "dd/MM/yyyy" }}</td>
+        <td>{{ inventory.storageLocation }}</td>
+        <td>{{ inventory.additionalNotes }}</td>
+        <td>{{ inventory.products[1].name }}</td>
+        <td>
+          <button type="button" class="btn btn-warning btn-sm mx-4">
+            <i class="fa-solid fa-pen"></i>
+          </button>
+          <button type="button" class="btn btn-danger btn-sm">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot *ngIf="!inventories.length">
+      <tr>
+        <td colspan="8" class="text-center">
+          <h4>Nenhum item encontrado!</h4>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>

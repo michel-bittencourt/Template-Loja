@@ -1,6 +1,8 @@
-﻿namespace Loja.Domain.Entities;
+﻿using System.Text.Json.Serialization;
 
-public sealed class InventoryEntity
+namespace Loja.Domain.Entities;
+
+public sealed class InventoryEntity : Entity
 {
     public int Id { get; private set; }
     public string Name { get; private set; }
@@ -9,11 +11,6 @@ public sealed class InventoryEntity
     public string? ExitReason { get; private set; } //Enum
     public string? StorageLocation { get; private set; }
     public string? AdditionalNotes { get; set; }
-    public bool Active { get; private set; } = true;
-
-
-
-    public int UserId { get; private set; }
 
     public ICollection<ProductEntity> Products { get; private set; }
 }

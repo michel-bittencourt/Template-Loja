@@ -1,14 +1,14 @@
 ﻿using Loja.Domain.Entities;
-using Loja.Domain.Repositories;
+using Loja.Domain.Interfaces;
 using Loja.Infrastructure.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace Loja.Infrastructure.Repositories;
 
-public class ProductRepository : IProductRepository
+public class InventoryRepository : IInventoryRepository
 {
     private readonly ApplicationDbContext _context;
-    public ProductRepository(ApplicationDbContext context)
+    public InventoryRepository(ApplicationDbContext context)
     {
         _context = context;
     }
@@ -38,30 +38,21 @@ public class ProductRepository : IProductRepository
         return (await _context.SaveChangesAsync()) > 0;
     }
 
-    public async Task<IEnumerable<ProductEntity>> GetAllProductsAsync()
+    public async Task<IEnumerable<InventoryEntity>> GetAllInventoriesAsync()
     {
-        var query = await _context.Products
-            .Where(p => p.Active == true)
+        var query = await _context.Inventories
+            .Where(i => i.Active == true)
+            .Include(i => i.Products)
+            .OrderBy(i => i.Name)
             .ToListAsync();
 
         return query;
     }
 
-    public async Task<IEnumerable<ProductEntity>> GetAllProductsByInventoryAsync(string inventory)
+    public async Task<InventoryEntity> GetInventoryByIdAsync(int inventoryId)
     {
-        var query = await _context.Products
-            .Where(p => p.Active == true)
-            .Include(p => p.Inventory)
-            .OrderBy(p => p.Name)
-            .ToListAsync();
-
-        return query;
-    }
-
-    public async Task<ProductEntity> GetProductByIdAsync(int productId)
-    {
-        var query = await _context.Products
-            .FirstOrDefaultAsync(p => p.Active == true && p.Id == productId);
+        var query = await _context.Inventories
+            .FirstOrDefaultAsync(i => i.Active == true && i.Id == inventoryId);
 
         return query;
     }

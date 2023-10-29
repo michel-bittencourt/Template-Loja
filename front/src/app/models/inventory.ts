@@ -1,9 +1,12 @@
-import { Product } from "./product";
+import { Product } from './product';
 
 export interface Inventory {
-    Id: number;
-    Name: string;
-    Description?: string;
+  id: number;
+  name: string;
+  entryDate: Date;
+  exitDate?: Date;
+  storageLocation?: string;
+  additionalNotes?: string;
 
-    ProductEntity: Product[];
+  products: Product[];
 }

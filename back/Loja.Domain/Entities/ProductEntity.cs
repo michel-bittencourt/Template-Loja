@@ -1,6 +1,9 @@
-﻿namespace Loja.Domain.Entities;
+﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
-public sealed class ProductEntity
+namespace Loja.Domain.Entities;
+
+public sealed class ProductEntity : Entity
 {
     public int Id { get; private set; }
     public string Name { get; private set; }
@@ -16,14 +19,10 @@ public sealed class ProductEntity
     public float AlertLevel { get; private set; }
     public float CriticalLevel { get; private set; }
     public bool Available { get; private set; }
-    public bool Active { get; private set; } = true;
 
-    public int UnitMeasureId { get; private set; }
-    public UnitMeasureEntity UnitMeasure { get; private set; }
-    public int CategoryId { get; private set; }
-    public CategoryEntity Category { get; private set; }
     public int InventoryId { get; private set; }
+
+    [JsonIgnore]
+    [IgnoreDataMember]
     public InventoryEntity Inventory { get; private set; }
-    public int SupplyId { get; private set; }
-    public SupplyEntity Supply { get; private set; }
 }

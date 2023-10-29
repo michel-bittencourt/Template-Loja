@@ -8,52 +8,117 @@ namespace Loja.Application.Services.Products;
 public class ProductService : IProductService
 {
     private readonly IProductRepository _productRepository;
+    //private readonly IGeneralRepository _generalRepository;
     private readonly IMapper _mapper;
 
     public ProductService(IProductRepository productRepository, IMapper mapper)
     {
         _productRepository = productRepository;
+        //_generalRepository = generalRepository;
         _mapper = mapper;
     }
 
-    public async Task Add(ProductDTO productDto)
+    public async Task<ProductDTO> AddProduct(ProductDTO productDTO)
     {
-        var product = _mapper.Map<ProductEntity>(productDto);
-        await _productRepository.CreateProductAsync(product);
+        try
+        {
+            var product = _mapper.Map<ProductEntity>(productDTO);
+            _productRepository.Add(product);
+
+            if (await _productRepository.SaveChangesAsync())
+                return productDTO;
+
+            return null;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 
-    public async Task Update(ProductDTO productDto)
+    public async Task<ProductDTO> UpdateProduct(int productId, ProductDTO productDTO)
     {
-        var product = _mapper.Map<ProductEntity>(productDto);
+        try
+        {
+            var product = await _productRepository.GetProductByIdAsync(productId);
+            product = _mapper.Map<ProductEntity>(productDTO);
+            _productRepository.Update(product);
 
-        await _productRepository.UpdateProductAsync(product);
+            if (await _productRepository.SaveChangesAsync())
+                return productDTO;
+
+            return null;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 
-    public async Task Remove(int? id)
+    public async Task<bool> DeleteProduct(int productId)
     {
-        var product = await _productRepository.GetProductByIdAsync(id);
+        try
+        {
+            var product = await _productRepository.GetProductByIdAsync(productId);
 
-        await _productRepository.RemoveProductAsync(product);
+            _productRepository.Delete(product);
+
+            return await _productRepository.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 
-    public async Task<ProductDTO> GetProductById(int? id)
+    public async Task<IEnumerable<ProductDTO>> GetAllProductsAsync()
     {
-        var product = await _productRepository.GetProductByIdAsync(id);
+        try
+        {
+            var products = await _productRepository.GetAllProductsAsync();
 
-        return _mapper.Map<ProductDTO>(product);
+            if (products == null)
+                return null;
+
+            return _mapper.Map<IEnumerable<ProductDTO>>(products);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 
-    public async Task<IEnumerable<ProductDTO>> GetProductsAsync()
+    public async Task<IEnumerable<ProductDTO>> GetAllProductsByInventoryAsync(string inventory)
     {
-        var products = await _productRepository.GetProductsAsync();
+        try
+        {
+            var products = await _productRepository.GetAllProductsByInventoryAsync(inventory);
 
-        return _mapper.Map<IEnumerable<ProductDTO>>(products);
+            if (products == null)
+                return null;
+
+            return _mapper.Map<IEnumerable<ProductDTO>>(products);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 
-    public async Task<IEnumerable<ProductDTO>> GetProductsInventoryAsync(int? id)
+    public async Task<ProductDTO> GetProductByIdAsync(int productId)
     {
-        var products = await _productRepository.GetProductsInventoryAsync(id);
+        try
+        {
+            var products = await _productRepository.GetProductByIdAsync(productId);
 
-        return _mapper.Map<IEnumerable<ProductDTO>>(products);
+            if (products == null)
+                return null;
+
+            return _mapper.Map<ProductDTO>(products);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 }
